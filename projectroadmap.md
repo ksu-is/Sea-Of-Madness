@@ -1,0 +1,10 @@
+- [x] Find other python code bases on github to gain potential resources to use in program
+- [x] Create README
+- [] Organize all files related to spring 1
+- [x] Build the story around the game
+- [] Plan out branching choices and impacts in game
+- [] Write one complete story line
+- [] Highlight problem areas and errors with comments 
+- [] Start writing other story lines
+- [] Highlight problem areas and errors with comments
+- [] Add sanity and health meters 
