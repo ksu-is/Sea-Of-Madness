@@ -178,7 +178,13 @@ class GUI:
                 # killProcess(test_pid)
                 os._exit(0)
                 # sys.exit()
-
+             if hero.sanity <= 0:
+                game_over = True
+                print(game_over)
+                logging.info("You succumbed to the darkness and lost your sanity")
+                tkinter.messagebox.showinfo( "You Lost Your Mind", "You have lost your way. . .")
+                self.window.destroy()
+             
     
 
     # Creating Button function
