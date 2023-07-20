@@ -79,7 +79,7 @@ class GUI:
         
 
 
-        window.title("Adventure Game")
+        window.title("Sea of Madness")
 
         window.geometry("966x745+0+0")
         window.minsize(width=966, height=745)
@@ -94,14 +94,14 @@ class GUI:
 
         # Getting and setting up image
         
-        self.img = ImageTk.PhotoImage(Image.open("start.png"))
+        self.img = ImageTk.PhotoImage(Image.open("Untitled-1.gif"))
 
         # Loading Background Image
         self.label = tkinter.Label(frame, image=self.img)
         self.label.pack()
 
         # Setting Basic buttons and Labels
-        self.l1 = tkinter.Label(frame, text="WELCOME TO OUR ADVERNTURE GAME")
+        self.l1 = tkinter.Label(frame, text="Welcome, to the Sea of Madness")
         self.l1.pack()
 
         health_text = "HEALTH = " + str(hero.health)
@@ -114,7 +114,7 @@ class GUI:
         self.l4 = tkinter.Label(frame, text=sanity_text, bg="Black", fg="White")
         self.l4.pack()
 
-        medkit_text = "MEDKITS = " + str(hero.items)
+        medkit_text = "SANITY PILLS = " + str(hero.items)
 
         self.l3 = tkinter.Label(frame, text=medkit_text, bg="Black", fg="White")
         self.l3.pack()
@@ -209,7 +209,7 @@ class GUI:
     # Starting of Game with 1st Stage
     def Entry(self):
         logging.info("Starting Game")
-        self.change_img("Cave2.png")
+        self.change_img("360_F_526237957_LrMO49tJwbKHn5Sl4AR8OOCfcRWoAk8r.jpg")
         self.b1.destroy()
         
         self.yes_1.pack()
