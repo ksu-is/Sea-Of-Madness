@@ -64,8 +64,8 @@ class player:
     def __init__(self, location, health, items, sanity):
         self.location = location
         self.health = health
+        self.sanity = sanity    
         self.items = items
-        self.sanity = sanity
 
 hero = player("entry", 100, 0, 100)
 
@@ -79,7 +79,7 @@ class GUI:
         
 
 
-        window.title("Sea of Madness")
+        window.title("Sea of MAdness")
 
         window.geometry("966x745+0+0")
         window.minsize(width=966, height=745)
@@ -95,7 +95,7 @@ class GUI:
         # Getting and setting up image
         
         self.img = ImageTk.PhotoImage(Image.open("Untitled-1.gif"))
-
+        
         # Loading Background Image
         self.label = tkinter.Label(frame, image=self.img)
         self.label.pack()
@@ -106,7 +106,7 @@ class GUI:
 
         health_text = "HEALTH = " + str(hero.health)
 
-        sanity_text = "SANITY = " + str(hero.sanity)
+        sanity_text = "SANITY =" + str(hero.sanity)
 
         self.l2 = tkinter.Label(frame, text=health_text, bg="Black", fg="White")
         self.l2.pack()
@@ -114,7 +114,9 @@ class GUI:
         self.l4 = tkinter.Label(frame, text=sanity_text, bg="Black", fg="White")
         self.l4.pack()
 
-        medkit_text = "SANITY PILLS = " + str(hero.items)
+        medkit_text = "MEDKITS = " + str(hero.items)
+
+        
 
         self.l3 = tkinter.Label(frame, text=medkit_text, bg="Black", fg="White")
         self.l3.pack()
@@ -178,13 +180,13 @@ class GUI:
                 # killProcess(test_pid)
                 os._exit(0)
                 # sys.exit()
-             if hero.sanity <= 0:
+            if hero.sanity <= 0:
                 game_over = True
                 print(game_over)
                 logging.info("You succumbed to the darkness and lost your sanity")
                 tkinter.messagebox.showinfo( "You Lost Your Mind", "You have lost your way. . .")
                 self.window.destroy()
-             
+
     
 
     # Creating Button function
@@ -216,7 +218,7 @@ class GUI:
         self.no_1.pack()
         
         self.l2.pack()
-        self.l1.config(text="You are in a dark cave. The entry has been sealed by fallen rocks. There is no way out. Ahead, you can see a door. Will you continue?")
+        self.l1.config(text="You wake up, lost, confused, in a hallway with dim lighting. Do you go enter one of the doors infront of you?")
 
 
         # yes_1 = tkinter.Button(frame, width=15, height=1, text="YES" command=Kick)
@@ -238,8 +240,8 @@ class GUI:
         self.medkit()
         self.bat_attack()
 
-        self.change_img("door.png")
-        self.l1.config(text="Door is opened by kick. Contains fast wind. Hero crawls to groung and reach end. Will you crawl?")
+        self.change_img("staircase.jpg")
+        self.l1.config(text="You eventually find your way near a staircase that seems oddly familiar, do you go down the stairs?")
         self.yes_1.configure(command=self.Door)
         # yes_1.pack()
 
@@ -255,8 +257,8 @@ class GUI:
         self.medkit()
         self.bat_attack()
 
-        self.change_img("Lake2.png")
-        self.l1.config(text="It's a long lake and there are two crocodiles in it. Ahead, you can see a rope. Will you swing from rope to get to end point?")
+        self.change_img("end_tunnel.jpg")
+        self.l1.config(text="After climbing down the stairs you open a door. You see a long tunnel in front of you, with what looks like a light infront of you. Do you walk ahead?")
         self.l2.pack()
         self.no_1.configure(command=self.no_Door)
         self.yes_1.configure(command=self.Alarming)
@@ -273,8 +275,8 @@ class GUI:
         self.medkit()
         self.bat_attack()
 
-        self.change_img("sand_dune.png")
-        self.l1.config(text="Space contains fire with sand dunes. Hero puts off fire with sand. Will you do this?")
+        self.change_img("old_study.jpg ")
+        self.l1.config(text="As you get to the end of the tunnel, you feel like it transported you to a different place, a calm place. Looks like an old study. Snoop around or keep going?")
         self.l2.pack()
         self.no_1.configure(command=self.no_Alarming)
         self.yes_1.configure(command=self.Cavern)
