@@ -79,7 +79,7 @@ class GUI:
         
 
 
-        window.title("Sea of MAdness")
+        window.title("Sea of Madness")
 
         window.geometry("966x745+0+0")
         window.minsize(width=966, height=745)
@@ -114,33 +114,26 @@ class GUI:
         self.l4 = tkinter.Label(frame, text=sanity_text, bg="Black", fg="White")
         self.l4.pack()
 
-        medkit_text = "MEDKITS = " + str(hero.items)
+        #medkit_text = "MEDKITS = " + str(hero.items)
 
         
 
-        self.l3 = tkinter.Label(frame, text=medkit_text, bg="Black", fg="White")
-        self.l3.pack()
+        #self.l3 = tkinter.Label(frame, text=medkit_text, bg="Black", fg="White")
+        #self.l3.pack()
 
         self.b1 = tkinter.Button(frame, width=15, height=3, text="START", command=self.Entry)
         self.b1.pack()
 
-        self.yes_1 = tkinter.Button(frame, width=15, height=1, text="YES")
+        self.yes_1 = tkinter.Button(frame, width=15, height=1, text="Option #1")
         # yes_1.pack()
 
-        self.no_1 = tkinter.Button(frame, width=15, height=1, text="NO")
+        self.no_1 = tkinter.Button(frame, width=15, height=1, text="Option #2")
         # no_1.pack()
 
-        self.use_medkit = tkinter.Button(frame, width=15, height=1, text="USE MEDKIT")
+        #self.use_medkit = tkinter.Button(frame, width=15, height=1, text="USE MEDKIT")
 
     # Function to make Medkit
-    def medkit(self):
-        medkit_find = random.choice([True, False])
-        if medkit_find is True:
-            hero.items += 1
-            tkinter.messagebox.showinfo( "Medkit", "Medkit Found!!")
-            medkit_text = "MEDKITS = " + str(hero.items)
-            self.l3.configure(text=medkit_text)
-            self.l3.pack()
+    
 
     # Function to allow use of Medkit
     def using_medkit(self):
@@ -161,13 +154,14 @@ class GUI:
     def bat_attack(self):
         bat_attack = random.choice([True, False])
         if bat_attack is True:
-            tkinter.messagebox.showinfo( "Attack", "Bat Attack!!")
-            hero.health -= random.randint(1, 100)
-            hero.sanity -= random.randint(1, 100)
+            self.change_img("scary.jpg")
+            tkinter.messagebox.showinfo( "Psychological Attack", "Your Sanity Weakens")
+            #hero.health -= random.randint(1, 100)
+            hero.sanity -= random.randint(1, 40)
             sanity_text = "SANITY = " + str(hero.sanity)
-            health_text = "HEALTH = " + str(hero.health)
+            #health_text = "HEALTH = " + str(hero.health)
             self.l4.configure(text=sanity_text)
-            self.l2.configure(text=health_text)
+            #self.l2.configure(text=health_text)
 
             # Killing the Game
             if hero.health <= 0:
@@ -218,7 +212,7 @@ class GUI:
         self.no_1.pack()
         
         self.l2.pack()
-        self.l1.config(text="You wake up, lost, confused, in a hallway with dim lighting. Do you go enter one of the doors infront of you?")
+        self.l1.config(text="You wake up, lost, confused, in a hallway with dim lighting. Do you go enter one of the doors infront of you? or Do you stand still?")
 
 
         # yes_1 = tkinter.Button(frame, width=15, height=1, text="YES" command=Kick)
@@ -229,15 +223,13 @@ class GUI:
         self.no_1.configure(command=self.no_kick)
         self.no_1.pack()
 
-        self.use_medkit.configure(command=self.using_medkit)
-        self.use_medkit.pack()
 
 
     # Choosing option YES
     def yes_kick(self):
         logging.info("YES")
         print("Location", hero.location)
-        self.medkit()
+    
         self.bat_attack()
 
         self.change_img("staircase.jpg")
@@ -248,13 +240,13 @@ class GUI:
     # Choosing option NO
     def no_kick(self):
         logging.info("NO")
-        self.change_img("bat.png")
-        self.l1.config(text="A bat flies over your head and you hear screetches in the distance. You sit in total darkness wondering if there's a way out.")
+        self.change_img("scary.jpg")
+        self.l1.config(text="The lights flash and all you can see is some kind of creature in front of you. Run. . .")
 
     # Choosing option YES
     def Door(self):
         logging.info("YES")
-        self.medkit()
+       
         self.bat_attack()
 
         self.change_img("end_tunnel.jpg")
@@ -272,7 +264,7 @@ class GUI:
     # Choosing option YES
     def Alarming(self):
         logging.info("YES")
-        self.medkit()
+       
         self.bat_attack()
 
         self.change_img("old_study.jpg ")
@@ -290,7 +282,7 @@ class GUI:
     # Choosing option YES
     def Cavern(self):
         logging.info("YES")
-        self.medkit()
+        
         self.bat_attack()
 
         self.change_img("Cavern.png")
@@ -308,7 +300,7 @@ class GUI:
     # Choosing option YES
     def Hallway(self):
         logging.info("YES")
-        self.medkit()
+        
         self.bat_attack()
 
         self.change_img("hallway.png")
@@ -326,7 +318,7 @@ class GUI:
     # Choosing option YES
     def Pit(self):
         logging.info("YES")
-        self.medkit()
+       
         self.bat_attack()
 
         self.change_img("Pit.png")
