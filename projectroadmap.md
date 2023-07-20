@@ -1,10 +1,16 @@
+IN NO PARTICULAR ORDER
 - [x] Find other python code bases on github to gain potential resources to use in program
 - [x] Create README
-- [] Add sanity and health meters 
-- [] Organize all files related to spring 1
+- [x] Add sanity and health meters
+- [ ] Change sanity so it affects decision making
+- [x] Organize all files related to spring 1
+- [] Find photos for all sections of the game 
 - [x] Build the story around the game
 - [] Plan out branching choices and impacts in game
 - [] Write one complete story line
 - [] Highlight problem areas and errors with comments 
 - [] Start writing other outcomes
 - [] Highlight problem areas and errors with comments
+- [] Get rid of all unused code from existing github project adventure game
+- [] Change buttons from "yes" and "no" to different decisions
+- [] Change "Bat Attack" to something else that impacts sanity
