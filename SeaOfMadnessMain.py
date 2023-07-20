@@ -61,12 +61,13 @@ logger.addHandler(handler)
 
 # Creating Player Class for Adventurer
 class player:
-    def __init__(self, location, health, items):
+    def __init__(self, location, health, items, sanity):
         self.location = location
         self.health = health
         self.items = items
+        self.sanity = sanity
 
-hero = player("entry", 100, 0)
+hero = player("entry", 100, 0, 100)
 
 
 class GUI:
@@ -105,8 +106,13 @@ class GUI:
 
         health_text = "HEALTH = " + str(hero.health)
 
+        sanity_text = "SANITY = " + str(hero.sanity)
+
         self.l2 = tkinter.Label(frame, text=health_text, bg="Black", fg="White")
         self.l2.pack()
+
+        self.l4 = tkinter.Label(frame, text=sanity_text, bg="Black", fg="White")
+        self.l4.pack()
 
         medkit_text = "MEDKITS = " + str(hero.items)
 
@@ -155,7 +161,10 @@ class GUI:
         if bat_attack is True:
             tkinter.messagebox.showinfo( "Attack", "Bat Attack!!")
             hero.health -= random.randint(1, 100)
+            hero.sanity -= random.randint(1, 100)
+            sanity_text = "SANITY = " + str(hero.sanity)
             health_text = "HEALTH = " + str(hero.health)
+            self.l4.configure(text=sanity_text)
             self.l2.configure(text=health_text)
 
             # Killing the Game
