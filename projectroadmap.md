@@ -4,13 +4,12 @@ IN NO PARTICULAR ORDER
 - [x] Add sanity and health meters
 - [ ] Change sanity so it affects decision making
 - [x] Organize all files related to spring 1
-- [] Find photos for all sections of the game 
+- [x] Find photos for all sections of the game 
 - [x] Build the story around the game
-- [] Plan out branching choices and impacts in game
-- [] Write one complete story line
+- [] Plan out branching choices and impacts in game ---- might be scratching this
+- [] Write one complete story line 
 - [] Highlight problem areas and errors with comments 
-- [] Start writing other outcomes
+- [] Start writing other outcomes ---might be scratching this
 - [] Highlight problem areas and errors with comments
-- [] Get rid of all unused code from existing github project adventure game
-- [] Change buttons from "yes" and "no" to different decisions
-- [] Change "Bat Attack" to something else that impacts sanity
+- [x] Change buttons from "yes" and "no" to different decisions
+- [x] Change "Bat Attack" to something else that impacts sanity
