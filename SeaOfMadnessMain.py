@@ -1,4 +1,3 @@
-#This is the sea of madness horror game
 # -*- coding: utf-8 -*-
 """Untitled42.ipynb
 
@@ -16,6 +15,7 @@ import tkinter
 from tkinter import *
 from PIL import ImageTk, Image
 from tkinter import messagebox
+import pygame
 
 import logging
 import logging.handlers as handlers
@@ -29,6 +29,17 @@ test_pid = pid
 
 def killProcess(pid):
     s.Popen('taskkill /F /PID {0}'.format(pid), shell=True)
+
+pygame.init()
+pygame.mixer.music.load("horror_ambience.mp3")
+pygame.mixer.music.set_volume(0.5)
+pygame.mixer.music.set_volume(0.5)
+pygame.mixer.music.play(-1)
+
+pygame.mixer.init()
+jumpscare_sounds = pygame.mixer.Sound("Jumpscare Sound.mp3")
+jumpscare_sounds.set_volume(0.02)
+
 
 
 game_over = False
@@ -77,7 +88,8 @@ class GUI:
         self.window = window
 
         
-
+    
+        choices = 0
 
         window.title("Sea of Madness")
 
@@ -115,6 +127,7 @@ class GUI:
         self.l4.pack()
 
         #medkit_text = "MEDKITS = " + str(hero.items)
+        
 
         
 
@@ -124,15 +137,18 @@ class GUI:
         self.b1 = tkinter.Button(frame, width=15, height=3, text="START", command=self.Entry)
         self.b1.pack()
 
-        self.yes_1 = tkinter.Button(frame, width=15, height=1, text="Option #1")
+        self.yes_1 = tkinter.Button(frame, width=15, height=1, text="Enter Door")
         # yes_1.pack()
 
-        self.no_1 = tkinter.Button(frame, width=15, height=1, text="Option #2")
+        self.no_1 = tkinter.Button(frame, width=15, height=1, text="Stand Still")
         # no_1.pack()
 
         #self.use_medkit = tkinter.Button(frame, width=15, height=1, text="USE MEDKIT")
 
     # Function to make Medkit
+
+    
+
     
 
     # Function to allow use of Medkit
@@ -155,6 +171,7 @@ class GUI:
         bat_attack = random.choice([True, False])
         if bat_attack is True:
             self.change_img("scary.jpg")
+            jumpscare_sounds.play()
             tkinter.messagebox.showinfo( "Psychological Attack", "Your Sanity Weakens")
             #hero.health -= random.randint(1, 100)
             hero.sanity -= random.randint(1, 40)
@@ -162,6 +179,7 @@ class GUI:
             #health_text = "HEALTH = " + str(hero.health)
             self.l4.configure(text=sanity_text)
             #self.l2.configure(text=health_text)
+            
 
             # Killing the Game
             if hero.health <= 0:
@@ -229,19 +247,24 @@ class GUI:
     def yes_kick(self):
         logging.info("YES")
         print("Location", hero.location)
-    
-        self.bat_attack()
+        
+        #self.bat_attack()
 
         self.change_img("staircase.jpg")
         self.l1.config(text="You eventually find your way near a staircase that seems oddly familiar, do you go down the stairs?")
         self.yes_1.configure(command=self.Door)
+        self.yes_1.config(text="Yes")
+        self.no_1.config(text="No")
         # yes_1.pack()
 
     # Choosing option NO
     def no_kick(self):
         logging.info("NO")
-        self.change_img("scary.jpg")
-        self.l1.config(text="The lights flash and all you can see is some kind of creature in front of you. Run. . .")
+        self.bat_attack()
+        self.change_img("scary_inhead.jpg")
+        self.yes_1.config(text="RUN")
+        self.no_1.config(text="Stand Still")
+        self.l1.config(text="The lights flash and all you can see is some kind of creature in front of you. Do you run or stand still?. . .")
 
     # Choosing option YES
     def Door(self):
@@ -250,15 +273,19 @@ class GUI:
         self.bat_attack()
 
         self.change_img("end_tunnel.jpg")
-        self.l1.config(text="After climbing down the stairs you open a door. You see a long tunnel in front of you, with what looks like a light infront of you. Do you walk ahead?")
+        self.l1.config(text="After climbing down the stairs you open a door. You see a long tunnel in front of you, with what looks like a light infront of you. Do you walk ahead? Or do you stand still?")
         self.l2.pack()
+        self.yes_1.config(text="Keep Going")
+        self.no_1.config(text="Stand Still")
         self.no_1.configure(command=self.no_Door)
         self.yes_1.configure(command=self.Alarming)
 
     # Choosing option NO
     def no_Door(self):
         logging.info("NO")
-        self.l1.config(text="You are injured because crocodile hits you. You are thinking any other way except using rope.")
+        self.bat_attack()
+        self.l1.config(text="It's too dark. . . keep moving")
+        
         self.l2.pack()
 
     # Choosing option YES
@@ -270,13 +297,15 @@ class GUI:
         self.change_img("old_study.jpg ")
         self.l1.config(text="As you get to the end of the tunnel, you feel like it transported you to a different place, a calm place. Looks like an old study. Snoop around or keep going?")
         self.l2.pack()
+        self.yes_1.config(text="Keep Going")
+        self.no_1.config(text="Snoop Around")
         self.no_1.configure(command=self.no_Alarming)
         self.yes_1.configure(command=self.Cavern)
 
     # Choosing option NO
     def no_Alarming(self):
         logging.info("NO")
-        self.l1.config(text="Your one leg and arm has burned because of fire.")
+        self.l1.config(text="You look around for a while, you find a note with the message \"Don't touch the book\" After enjoying the warmth a little longer, you decide that you should keep going.")
         self.l2.pack()
 
     # Choosing option YES
@@ -285,8 +314,8 @@ class GUI:
         
         self.bat_attack()
 
-        self.change_img("Cavern.png")
-        self.l1.config(text="You stumble into a dimly lit cavern. You cannot go right or left but the cave continues ahead. Will you go on?")
+        self.change_img("dark_wet.jpg")
+        self.l1.config(text="After leaving the study, you stumble into a dark wet room, you hear whispers coming from the darkness, do you keep going? or stand still?")
         self.l2.pack()
         self.no_1.configure(command=self.no_Cavern)
         self.yes_1.configure(command=self.Hallway)
