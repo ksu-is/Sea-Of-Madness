@@ -40,7 +40,26 @@ pygame.mixer.init()
 jumpscare_sounds = pygame.mixer.Sound("Jumpscare Sound.mp3")
 jumpscare_sounds.set_volume(0.02)
 
+doorcreak = pygame.mixer.Sound("doorsound.mp3")
+doorcreak.set_volume(0.02)
 
+underwater = pygame.mixer.Sound("underwatersound.mp3")
+underwater.set_volume(0.05)
+
+foghorn = pygame.mixer.Sound("scaryfoghorn.mp3")
+foghorn.set_volume(0.05)
+
+endmusic = pygame.mixer.Sound("end_theme.mp3")
+endmusic.set_volume(0.05)
+
+footsteps = pygame.mixer.Sound("foostep.mp3")
+footsteps.set_volume(0.05)
+
+whisper = pygame.mixer.Sound("whisper.mp3")
+whisper.set_volume(0.05)
+
+waterfootstep = pygame.mixer.Sound("waterfootstep.mp3")
+waterfootstep.set_volume(0.05)
 
 game_over = False
 
@@ -77,6 +96,7 @@ class player:
         self.health = health
         self.sanity = sanity    
         self.items = items
+        self.waited = False
 
 hero = player("entry", 100, 0, 100)
 
@@ -87,7 +107,7 @@ class GUI:
     def __init__(self, window):
         self.window = window
 
-        
+        self.waited = False
     
         choices = 0
 
@@ -96,6 +116,7 @@ class GUI:
         window.geometry("966x745+0+0")
         window.minsize(width=966, height=745)
         window.maxsize(width=966, height=745)
+        window.configure(bg="black")
 
 
         frame = Frame(window)
@@ -116,21 +137,18 @@ class GUI:
         self.l1 = tkinter.Label(frame, text="Welcome, to the Sea of Madness")
         self.l1.pack()
 
-        health_text = "HEALTH = " + str(hero.health)
+        #health_text = "HEALTH = " + str(hero.health)
 
         sanity_text = "SANITY =" + str(hero.sanity)
 
-        self.l2 = tkinter.Label(frame, text=health_text, bg="Black", fg="White")
-        self.l2.pack()
+        #self.l2 = tkinter.Label(frame, text=health_text, bg="Black", fg="White")
+        #self.l2.pack()
 
         self.l4 = tkinter.Label(frame, text=sanity_text, bg="Black", fg="White")
         self.l4.pack()
 
         #medkit_text = "MEDKITS = " + str(hero.items)
         
-
-        
-
         #self.l3 = tkinter.Label(frame, text=medkit_text, bg="Black", fg="White")
         #self.l3.pack()
 
@@ -147,9 +165,11 @@ class GUI:
 
     # Function to make Medkit
 
-    
-
-    
+    def game_over (self, message):
+            logging.info("GAME OVER")
+            self.l1.config(text=message)
+            self.yes_1.config(state='disabled')
+            self.no_1.config(state='disabled')
 
     # Function to allow use of Medkit
     def using_medkit(self):
@@ -170,7 +190,7 @@ class GUI:
     def bat_attack(self):
         bat_attack = random.choice([True, False])
         if bat_attack is True:
-            self.change_img("scary.jpg")
+            self.change_img("scary_inhead.jpg")
             jumpscare_sounds.play()
             tkinter.messagebox.showinfo( "Psychological Attack", "Your Sanity Weakens")
             #hero.health -= random.randint(1, 100)
@@ -182,16 +202,7 @@ class GUI:
             
 
             # Killing the Game
-            if hero.health <= 0:
-                game_over = True
-                print(game_over)
-                
-                logging.info("YOU DIED")
-                tkinter.messagebox.showinfo( "Death", "You Died!!")
-                self.window.destroy()
-                # killProcess(test_pid)
-                os._exit(0)
-                # sys.exit()
+            
             if hero.sanity <= 0:
                 game_over = True
                 print(game_over)
@@ -223,13 +234,13 @@ class GUI:
     # Starting of Game with 1st Stage
     def Entry(self):
         logging.info("Starting Game")
-        self.change_img("360_F_526237957_LrMO49tJwbKHn5Sl4AR8OOCfcRWoAk8r.jpg")
+        self.change_img("hallwaydoor.jpg")
         self.b1.destroy()
         
         self.yes_1.pack()
         self.no_1.pack()
         
-        self.l2.pack()
+        self.l4.pack()
         self.l1.config(text="You wake up, lost, confused, in a hallway with dim lighting. Do you go enter one of the doors infront of you? or Do you stand still?")
 
 
@@ -247,7 +258,7 @@ class GUI:
     def yes_kick(self):
         logging.info("YES")
         print("Location", hero.location)
-        
+        doorcreak.play()
         #self.bat_attack()
 
         self.change_img("staircase.jpg")
@@ -255,26 +266,28 @@ class GUI:
         self.yes_1.configure(command=self.Door)
         self.yes_1.config(text="Yes")
         self.no_1.config(text="No")
-        # yes_1.pack()
+        #yes_1.pack()
 
     # Choosing option NO
     def no_kick(self):
         logging.info("NO")
-        self.bat_attack()
+        hero.sanity -= 40
+        sanity_text = "SANITY = " + str(hero.sanity)
+        self.l4.configure(text=sanity_text)
         self.change_img("scary_inhead.jpg")
         self.yes_1.config(text="RUN")
         self.no_1.config(text="Stand Still")
-        self.l1.config(text="The lights flash and all you can see is some kind of creature in front of you. Do you run or stand still?. . .")
+        self.l1.config(text="The lights flash and all you can see is some kind of creature in front of you. Do you run or continue to stand still?. . .")
 
     # Choosing option YES
     def Door(self):
         logging.info("YES")
        
         self.bat_attack()
-
+        footsteps.play()
         self.change_img("end_tunnel.jpg")
         self.l1.config(text="After climbing down the stairs you open a door. You see a long tunnel in front of you, with what looks like a light infront of you. Do you walk ahead? Or do you stand still?")
-        self.l2.pack()
+        self.l4.pack()
         self.yes_1.config(text="Keep Going")
         self.no_1.config(text="Stand Still")
         self.no_1.configure(command=self.no_Door)
@@ -286,17 +299,14 @@ class GUI:
         self.bat_attack()
         self.l1.config(text="It's too dark. . . keep moving")
         
-        self.l2.pack()
+        self.l4.pack()
 
     # Choosing option YES
     def Alarming(self):
         logging.info("YES")
-       
-        self.bat_attack()
-
         self.change_img("old_study.jpg ")
         self.l1.config(text="As you get to the end of the tunnel, you feel like it transported you to a different place, a calm place. Looks like an old study. Snoop around or keep going?")
-        self.l2.pack()
+        self.l4.pack()
         self.yes_1.config(text="Keep Going")
         self.no_1.config(text="Snoop Around")
         self.no_1.configure(command=self.no_Alarming)
@@ -305,44 +315,57 @@ class GUI:
     # Choosing option NO
     def no_Alarming(self):
         logging.info("NO")
-        self.l1.config(text="You look around for a while, you find a note with the message \"Don't touch the book\" After enjoying the warmth a little longer, you decide that you should keep going.")
-        self.l2.pack()
+        self.l1.config(text="You look around for a while, you find a note with the message \"Don't touch the book, Follow the light\" \n After enjoying the warmth a little longer, you decide that you should keep going.")
+        footsteps.play()
+        hero.sanity += 20
+        sanity_text = "SANITY = " + str(hero.sanity)
+        self.l4.configure(text=sanity_text)
+        self.l4.pack()
 
     # Choosing option YES
     def Cavern(self):
         logging.info("YES")
         
-        self.bat_attack()
-
         self.change_img("dark_wet.jpg")
+        
         self.l1.config(text="After leaving the study, you stumble into a dark wet room, you hear whispers coming from the darkness, do you keep going? or stand still?")
-        self.l2.pack()
+        whisper.play()
+        self.yes_1.config(text="Keep Going")
+        self.no_1.config(text="Stand Still")
+        self.l4.pack()
         self.no_1.configure(command=self.no_Cavern)
         self.yes_1.configure(command=self.Hallway)
 
     # Choosing option NO
     def no_Cavern(self):
         logging.info("NO")
-        self.l1.config(text="You sit down and eat some food you brought with you.")
-        self.l2.pack()
-
+        self.waited = True
+        waterfootstep.play()
+        self.l1.config(text="You hear something slowly walking past you in the pitch black darkness. After waiting for a minute it seems like the coast is clear, keep moving. ")
+        self.l4.pack()
+        
     # Choosing option YES
     def Hallway(self):
         logging.info("YES")
-        
-        self.bat_attack()
-
-        self.change_img("hallway.png")
-        self.l1.config(text="You are in a wide hallway. It continues on indefinitely. There's no turning back. Will you go on?")
-        self.l2.pack()
+        if not self.waited:
+            self.bat_attack()
+    
+        self.change_img("library.jpg")
+        self.l1.config(text="You find yourself in a large, dark library of some sort. You see a book named \"The Sea of Madness\" Do you pick it up?")
+        self.l4.pack()
+        self.yes_1.config(text="Continue walking")
+        self.no_1.config(text="Pick up the book")
         self.no_1.configure(command=self.no_Hallway)
         self.yes_1.configure(command=self.Pit)
 
     # Choosing option NO
     def no_Hallway(self):
         logging.info("NO")
-        self.l1.config(text="You try to call your help but no one is there.")
-        self.l2.pack()
+        self.l1.config(text="You grab the book and you start to shudder, you start losing consciousness as your vision fades to black.")
+        hero.sanity -= 1000
+        sanity_text = "SANITY = " + str(hero.sanity)
+        self.l4.configure(text=sanity_text)
+        self.l4.pack()
 
     # Choosing option YES
     def Pit(self):
@@ -350,39 +373,55 @@ class GUI:
        
         self.bat_attack()
 
-        self.change_img("Pit.png")
-        self.l1.config(text="You fall head first into an ominous and languid pit. Luckly, you only landed on your back. You can try to climb out. Will you try?")
-        self.l2.pack()
+        self.change_img("waterphoto.jpg")
+        self.l1.config(text="As you walk down the hallway, you fall deep into a body of water. You see a light deeper in the water. Swim up or down? ")
+        underwater.play()
+        self.yes_1.config(text="Swim down")
+        self.no_1.config(text="Swim up")
+        self.l4.pack()
         self.no_1.configure(command=self.no_Pit)
         self.yes_1.configure(command=self.Gold)
 
     # Choosing option NO
     def no_Pit(self):
         logging.info("NO")
-        self.l1.config(text="You sit in utter darkness.")
-        self.l2.pack()
+        self.l1.config(text="You start to swim up, you slowly realize that the surface is getting farther and farther away, running out of oxygen. You succumb to the Sea of Madness.")
+        
+        self.l4.pack()
 
     # Choosing option YES
     def Gold(self):
         logging.info("YES")
-        self.change_img("Gold.png")
-        self.l1.config(text="You reached to your final destination.Finally, you can see gold. You can take the gold. Will you take?")
-        self.l2.pack()
+        self.change_img("Lighthouse.jpg")
+        self.l1.config(text="As you get closer to the light, you realize it's a way out of the water. As you surface you see a lighthouse, do you swim towards the lighthouse?")
+        self.yes_1.config(text="Away From Lighthouse")
+        self.no_1.config(text="Toward lighthouse")
+        self.l4.pack()
         self.no_1.configure(command=self.Lose)
         self.yes_1.configure(command=self.Win)
 
     # Choosing option NO
     def Lose(self):
         logging.info("LOSE")
-        self.change_img("Lose.png")
-        self.l1.config(text="You did not take the Gold. GAME OVER!")
+        self.change_img("lighthouse2.jpg")
+        pygame.mixer.music.stop()
+        foghorn.play()
+        hero.sanity -= 81375910
+        sanity_text = "SANITY = " + str(hero.sanity)
+        self.l4.configure(text=sanity_text)
+        self.l1.config(text="You swim towards the lighthouse, and as you get closer the light turns red.")
+        self.game_over("The Sea of Madness has overtaken your mind.")
 
     # Choosing option YES
     def Win(self):
         logging.info("WON")
-        self.change_img("Win.png")
-        self.l1.config(text="You took enough gold. GAME OVER!")
-        self.l2.pack()
+        self.change_img("forestwater.jpg")
+        self.l1.config(text="As you swim away, you realize it's getting brighter and you start to feel safe again.")
+        pygame.mixer.music.stop()
+        underwater.stop()
+        endmusic.play()
+        self.l4.pack()
+        self.game_over("You've escaped the Sea of Madness.")
 
 
 class Game:
@@ -394,6 +433,8 @@ class Game:
             time.sleep(delay)
         print("\n")
 
+    def game_over (self, message):
+            gui.game_over(message)
 
     def reset_console(self):
         print("\n")
@@ -414,199 +455,21 @@ game_functions = Game()
 
 class World:
 
-    def entry(self):
-        hero.location = "entry"
-        print(f"\nHealth: {hero.health}")
-        game_functions.fprint("You are in a dark cave. The entry has been sealed by fallen rocks. There is no way out.", 2)
-        print("Ahead, you can see a door. Will you continue?")
-        print("Enter 'yes' or 'no'.")
-        self.check_medkit()
-        self.handle_goblin()
-        while True:
-            action = input("\n> ")
-            if action == "yes":
-                self.door()
-            elif action == "no":
-                game_functions.fprint("A bat flies over your head and you hear screetches in the distance.")
-            elif action == "m":
-                self.use_medkit()
-            else:
-                game_functions.fprint("You sit in total darkness wondering if there's a way out.")
+    
 
-    def door(self):
-        hero.location = "door"
-        print(f"\nHealth: {hero.health}")
-        game_functions.fprint("Door is opened by kick. Contains fast wind.", 2)
-        print("Hero crawls to groung and reach end. Will you crawl?")
-        print("Enter 'yes' or 'no'.")
-        self.check_medkit()
-        self.handle_goblin()
-        while True:
-            action = input("\n> ")
-            if action == "yes":
-                self.lake()
-            elif action == "no":
-                game_functions.fprint("You hear loud voices of wind.")
-            elif action == "m":
-                self.use_medkit()
-            else:
-                game_functions.fprint("You are scare of voices.")
-
-    def lake(self):
-        hero.location = "lake"
-        print(f"\nHealth: {hero.health}")
-        game_functions.fprint("It's a long lake and there are two crocodiles in it.", 2)
-        print("Ahead, you can see a rope. Will you swing from rope to get to end point?")
-        print("Enter 'yes' or 'no'.")
-        self.check_medkit()
-        self.handle_goblin()
-        while True:
-            action = input("\n> ")
-            if action == "yes":
-                self.alarming()
-            elif action == "no":
-                game_functions.fprint("You are injured because crocodile hits you.")
-            elif action == "m":
-                self.use_medkit()
-            else:
-                game_functions.fprint("You are thinking any other way except using rope.")
-
-    def alarming(self):
-        hero.location = "alarming"
-        print(f"\nHealth: {hero.health}")
-        game_functions.fprint("Space contains fire with sand dunes.", 2)
-        print("Hero puts off fire with sand. Will you do this?")
-        print("Enter 'yes' or 'no'.")
-        self.check_medkit()
-        while True:
-            action = input("\n> ")
-            if action == "yes":
-                self.cavern()
-            elif action == "no":
-                game_functions.fprint("Your one leg and arm has burned because of fire.")
-            elif action == "m":
-                self.use_medkit()
-            else:
-                game_functions.fprint("You are feeling very hot.")
-
-    def cavern(self):
-        hero.location = "cavern"
-        print(f"\nHealth: {hero.health}")
-        game_functions.fprint("You stumble into a dimly lit cavern.", 2)
-        print("You cannot go right or left but the cave continues ahead. Will you go on?")
-        print("Enter 'yes' or 'no'.")
-        self.check_bat_attack()
-        self.handle_goblin()
-        while True:
-            action = input("\n> ")
-            if action == "yes":
-                self.hallway()
-            elif action == "no":
-                game_functions.fprint("You sit down and eat some food you brought with you.")
-            elif action == "m":
-                self.use_medkit()
-            else:
-                game_functions.fprint("You shiver from the cold.")
-
-    def hallway(self):
-        hero.location = "hallway"
-        print(f"\nHealth: {hero.health}")
-        game_functions.fprint("You are in a wide hallway. It continues on indefinitely.", 2)
-        print("There's no turning back. Will you go on?")
-        print("Enter 'yes' or 'no'.")
-        self.handle_goblin()
-        while True:
-            action = input("\n> ")
-            if action == "yes":
-                self.pit()
-            elif action == "no":
-                game_functions.fprint("You try to call your help but no one is there.")
-            elif action == "m":
-                self.use_medkit()
-            else:
-                game_functions.fprint("You wonder what time it is.")
-
-    def pit(self):
-        hero.location = "pit"
-        print(f"\nHealth: {hero.health}")
-        game_functions.fprint("You fall head first into an ominous and languid pit. Luckly, you only landed on your back", 2)
-        print("You can try to climb out. Will you try?")
-        print("Enter 'yes' or 'no'.")
-        self.handle_goblin()
-        while True:
-            action = input("\n> ")
-            if action == "yes":
-                self.gold()
-            elif action == "no":
-                game_functions.fprint("You sit in utter darkness.")
-            elif action == "m":
-                self.use_medkit()
-            else:
-                game_functions.fprint("You feel hopeless.")
-
-    def gold(self):
-        hero.location = "gold"
-        print(f"\nHealth: {hero.health}")
-        game_functions.fprint("You reached to your final destination.", 2)
-        game_functions.sprint("Finally, you can see gold.", 2)
-        print("You can take the gold. Will you take?")
-        print("Enter 'yes' or 'no'.")
-        while True:
-            action = input("\n> ")
-            if action == "yes":
-                game_functions.fprint("You take enough gold.", 2)
-                print("GAME OVER.")
-                sys.exit()
-            elif action == "no":
-                game_functions.fprint("You don't find the gold, you lose.")
-            elif action == "m":
-                self.use_medkit()
-            else:
-                game_functions.fprint("You give up.")
-
-
-
-
-    def use_medkit(self):
-        if "medkit" in hero.items:
-            hero.items -= 1
-            game_functions.fprint("You used your medkit")
-            hero.health = 100
-            print(f"\nHealth: {hero.health}")
-        else:
-            game_functions.fprint("You don't have a medkit.")
-
-
-
-    def check_medkit(self):
-        medkit_find = random.choice([True, False])
-        if medkit_find is True:
-            hero.items += 1
-            game_functions.fprint("You found a medkit!", 2)
-            print("Enter 'm' to use it.")
-
-
-    def check_bat_attack(self):
-        bat_attack = random.choice([True, False])
-        if bat_attack is True:
-            game_functions.fprint("You were attacked by a bat!", 2)
-            hero.health -= random.randint(1, 100)
-            print(f"\nHealth: {hero.health}")
-            if hero.health == 0:
-                game_functions.fprint("You are dead!")
-                sys.exit()
-
-def test_run():
-    root = Tk()
-    gui = GUI(root)
-    root.mainloop()
-    pass
+    def test_run():
+        root = Tk()
+        gui = GUI(root)
+        root.mainloop()
+        pass
 
 if __name__ == '__main__':
     # Running the main GUI object
     root = Tk()
     gui = GUI(root)
     root.mainloop()
+    game_functions = Game()
+    
 
     # new_world = World()
 
