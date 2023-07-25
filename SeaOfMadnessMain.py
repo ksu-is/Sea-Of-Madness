@@ -88,7 +88,7 @@ class player:
         self.items = items
         self.waited = False
 
-hero = player("entry", 100, 0, 100)
+hero = player("entry", 0, 100)
 
 class GUI:
     
