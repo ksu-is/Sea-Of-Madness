@@ -1,5 +1,3 @@
-#The Sea of Madness - code used from https://github.com/Rohboam/Adventure-Game-Tkinter-Python
-
 import sys
 import os
 import random
@@ -68,17 +66,7 @@ str_file = datetime.now().strftime('mylogfile_%Y-%m-%d_%H-%M')
 
 # print(str_file)
 
-log_filename = "./Logs/" + str_file + ".log"
 
-logger = logging.getLogger(__name__)
-
-logging.basicConfig(level=logging.INFO, filename=log_filename, filemode="w",
-                            format="%(asctime)s - %(levelname)s - %(message)s")
-
-handler = logging.FileHandler(log_filename)
-formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-handler.setFormatter(formatter)
-logger.addHandler(handler)
 
 # Creating Player Class for Adventurer
 class player:
@@ -161,19 +149,7 @@ class GUI:
             self.no_1.config(state='disabled')
 
     # Function to allow use of Medkit
-    def using_medkit(self):
-        logging.info("Using MedKit")
-        if hero.items >= 1:
-            hero.health = 100
-            health_text = "HEALTH = " + str(hero.health)
-
-            hero.items -= 1
-
-            medkit_text = "MEDKITS = " + str(hero.items)
-            self.l3.configure(text=medkit_text)
-            self.l3.pack()
-
-            self.l2.configure(text=health_text)
+    
 
     # Function to handle Bat Attack
     def bat_attack(self):
@@ -200,7 +176,6 @@ class GUI:
                 self.window.destroy()
 
     
-
     # Creating Button function
     def create_btn(self, str, cmd):
         btn = self.tkinter.Button(self.frame, width=15, height=1, text=str, command=cmd)
@@ -225,7 +200,6 @@ class GUI:
         logging.info("Starting Game")
         self.change_img("hallwaydoor.jpg")
         self.b1.destroy()
-        
         self.yes_1.pack()
         self.no_1.pack()
         
@@ -233,7 +207,6 @@ class GUI:
         self.l1.config(text="You wake up, lost, confused, in a hallway with dim lighting. Do you go enter one of the doors infront of you? or Do you stand still?")
 
 
-        # yes_1 = tkinter.Button(frame, width=15, height=1, text="YES" command=Kick)
         self.yes_1.configure(command=self.yes_kick)
         self.yes_1.pack()
         
@@ -384,6 +357,9 @@ class GUI:
         self.change_img("underwater.jpg")
         pygame.mixer.music.stop()
         scaryotherend.play()
+        hero.sanity -= 81375910
+        sanity_text = "SANITY = " + str(hero.sanity)
+        self.l4.configure(text=sanity_text)
         self.l1.config(text="You start to swim up, you slowly realize that the surface is getting farther and farther away, running out of oxygen. You succumb to the Sea of Madness.")
         self.game_over("You try to swim up, but the surface continues to get futher away, as you run out of oxygen. You succumb to the Sea of Madness")
         
